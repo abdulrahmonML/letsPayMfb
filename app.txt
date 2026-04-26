@@ -1,6 +1,0 @@
-1. Check existing user
-2. Create User
-3. Generate BVN
-4. Create NIBSS account
-5. Save BVN to DB
-6. Save Account to DB
