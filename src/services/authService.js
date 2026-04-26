@@ -1,21 +1,13 @@
 const AppError = require("../utils/appError");
 const User = require("../models/user");
-const Bvn = require("../models/bvn");
+const Nin = require("../models/nin");
 const Account = require("../models/account");
-const generateuniqueBvn = require("../utils/generateBvn");
+const generateUniqueNin = require("../utils/generateNin");
 const nibssService = require("../services/nibssService");
-const Bvn = require("../models/bvn");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const registerUser = async (
-  firstName,
-  lastName,
-  phone,
-  email,
-  password,
-  dob,
-) => {
+const register = async (firstName, lastName, phone, email, password, dob) => {
   //check if user exist
   const existingUser = await User.findOne({ email });
 
@@ -37,41 +29,40 @@ const registerUser = async (
     dob,
   });
 
-  //create bvn
-  const generatedBvn = await generateUniqueBvn(firstName, lastName, dob);
+  //create nin
+  const generatedNin = await generateUniqueNin(firstName, lastName, dob);
+
+  const nin = generatedNin;
+  const kycType = "nin";
 
   // create account
-  const nibssAccount = await nibssService.createAccount(
-    "bvn",
-    generatedBvn,
-    dob,
-  );
 
-  // SAVE bvn details
-  const bvnDetails = await Bvn.create({
+  const nibssAccount = await nibssService.createAccount(kycType, nin, dob);
+
+  // SAVE nin details
+  const ninDetails = await Nin.create({
     user: user._id,
-    bvnNo: generatedBvn,
+    ninNo: nin,
   });
 
   const accountDetails = await Account.create({
     userId: user._id,
-    acctNo: nibssAccount.accountNumber,
-    balance: nibssAccount.balance,
+    acctNo: nibssAccount.account.accountNumber,
+    balance: nibssAccount.account.balance,
     status: "active",
-    bankCode: nibssAccount.bankCode,
-    bankName: nibssAccount.bankName,
+    bankCode: nibssAccount.account.bankCode,
   });
 
   await User.findByIdAndUpdate(user._id, {
-    bvnId: bvnDetails._id,
+    ninId: ninDetails._id,
     accountId: accountDetails._id,
   });
 
-  return { bvnDetails, accountDetails, user };
+  return { ninDetails, accountDetails, user };
 };
 
 //LOGIN SERVICE
-const loginUser = async (email, password) => {
+const login = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -91,6 +82,14 @@ const loginUser = async (email, password) => {
       { expiresIn: process.env.JWT_EXPIRES_IN },
     );
   }
+
+  return {
+    token,
+    name: {
+      firstName: user.name.firstName,
+      lastName: user.name.lastName,
+    },
+  };
 };
 
-module.exports = { registerUser };
+module.exports = { register, login };

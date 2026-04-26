@@ -26,10 +26,6 @@ const accountSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    bankName: {
-      type: String,
-      required: true,
-    },
   },
   { timestamps: true },
 );

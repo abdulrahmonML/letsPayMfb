@@ -8,13 +8,14 @@ let nibssToken = null;
 let tokenExpiry = null;
 
 const getNibssToken = async () => {
-  try {
-    // check if token exists and hasn't expired
-    if (nibssToken && tokenExpiry && Date.now() < tokenExpiry) {
-      return nibssToken;
-    }
+  // check if token exists and hasn't expired
+  if (nibssToken && tokenExpiry && Date.now() < tokenExpiry) {
+    return nibssToken;
+  }
 
+  try {
     // token missing or expired — fetch a fresh one
+
     const response = await axios.post(`${NIBSS_BASE_URL}/api/auth/token`, {
       apiKey: process.env.NIBSS_API_KEY,
       apiSecret: process.env.NIBSS_API_SECRET,
@@ -25,6 +26,7 @@ const getNibssToken = async () => {
 
     return nibssToken;
   } catch (error) {
+    console.error("NIBSS token fetch failed:", error.message);
     throw new Error(`NIBSS authentication failed: ${error.message}`);
   }
 };

@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema(
         maxlength: 100,
         trim: true,
       },
-      required: true,
     },
     phone: {
       type: String,
@@ -40,9 +39,9 @@ const userSchema = new mongoose.Schema(
       maxlength: 10,
       trim: true,
     },
-    bvnId: {
+    ninId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Bvn",
+      ref: "Nin",
     },
     accountId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -52,7 +51,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const bcrypt = require("bcryptjs");
 userSchema.pre("save", async function () {
   // If password isn't changed, just stop (don't call next)
   if (!this.isModified("password")) return;

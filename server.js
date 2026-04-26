@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const CONNECTDB = require("./src/config/db");
 const { onboard } = require("./src/services/nibssService");
+const authRoutes = require("./src/routes/authRoutes");
 
 app.use(express.json());
 
@@ -11,6 +12,8 @@ app.get("/", (req, res) => {
 });
 
 CONNECTDB();
+
+app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 3000;
 

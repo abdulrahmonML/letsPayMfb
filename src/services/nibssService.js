@@ -2,23 +2,33 @@
 
 const nibssRequest = require("../config/nibss");
 
-const insertBvn = async (bvn, firstName, lastName, dob) => {
-  const nibssApi = await nibssRequest();
+// in nibssService.js
+const axios = require("axios");
 
-  const response = await nibssApi.post("/api/insertBvn", {
-    bvn,
+const nibssPublicRequest = () => {
+  return axios.create({
+    baseURL: process.env.NIBSS_BASE_URL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const insertBvn = async (bvn, firstName, lastName, dob) => {
+  const client = nibssPublicRequest(); // no token
+  const response = await client.post("/api/insertBvn", {
+    BVN: bvn,
     firstName,
     lastName,
     dob,
   });
-
   return response.data;
 };
 
 const insertNin = async (nin, firstName, lastName, dob) => {
-  const nibssApi = await nibssRequest();
+  const client = await nibssPublicRequest();
 
-  const response = await nibssApi.post("/api/insertNin", {
+  const response = await client.post("/api/insertNin", {
     nin,
     firstName,
     lastName,
@@ -28,12 +38,12 @@ const insertNin = async (nin, firstName, lastName, dob) => {
   return response.data;
 };
 
-const createAccount = async (kycType, kycId, dob) => {
+const createAccount = async (kycType, kycID, dob) => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.post("/api/account/create", {
     kycType,
-    kycId,
+    kycID,
     dob,
   });
 
@@ -99,7 +109,7 @@ const getTransactionStatus = async (transactionId) => {
 };
 
 module.exports = {
-  insertBvn,
+  /* insertBvn, */
   insertNin,
   createAccount,
   nameEnquiry,

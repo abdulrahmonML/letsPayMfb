@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const bvnSchema = new mongoose.Schema(
+const ninSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    bvnNo: {
+    ninNo: {
       type: String,
       required: true,
       maxlength: 11,
@@ -18,4 +18,4 @@ const bvnSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-module.exports = mongoose.model("Bvn", bvnSchema);
+module.exports = mongoose.model("Nin", ninSchema);
