@@ -1,6 +1,6 @@
 const authService = require("../services/authService");
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   try {
     const { name, phone, email, password, dob } = req.body;
 
@@ -20,9 +20,25 @@ const registerUser = async (req, res) => {
       message: `User ${lastName} ${firstName} created successfully`,
     });
   } catch (error) {
-    console.log(error); // This will tell you exactly which line in the service is dying
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
-module.exports = { registerUser };
+const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const result = await authService.login(email, password);
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token: result.token,
+      user: result.user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { registerUser, loginUser };

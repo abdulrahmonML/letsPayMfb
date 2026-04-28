@@ -6,6 +6,7 @@ const generateUniqueNin = require("../utils/generateNin");
 const nibssService = require("../services/nibssService");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 const register = async (firstName, lastName, phone, email, password, dob) => {
   //check if user exist
@@ -73,21 +74,19 @@ const login = async (email, password) => {
 
   if (!correctPassword) {
     throw new AppError("Invalid credentials", 400);
-
-    const token = jwt.sign(
-      {
-        id: user._id,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN },
-    );
   }
+  const token = jwt.sign(
+    {
+      id: user._id,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN },
+  );
 
   return {
-    token,
-    name: {
-      firstName: user.name.firstName,
-      lastName: user.name.lastName,
+    token: token,
+    user: {
+      name: user.name,
     },
   };
 };

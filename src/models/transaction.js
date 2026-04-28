@@ -5,39 +5,36 @@ const transactionSchema = new mongoose.Schema(
     accountId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Account",
-      required: true,
     },
-    transactionId: {
+    nibssTransactionId: {
       type: String,
       default: null,
     },
     transactionRef: {
       type: String,
-      required: true,
     },
     amount: {
       type: Number,
-      required: true,
     },
     sender: {
       name: { type: String },
       acctNo: { type: String },
-      required: true,
     },
-    reciever: {
+    recipient: {
       name: { type: String },
       acctNo: { type: String },
-      required: true,
+    },
+    type: {
+      type: String,
+      emum: ["sendMoney", "recieveMoney"],
     },
     status: {
       type: String,
       enum: ["PENDING", "SUCCESS", "FAILED"],
       default: "PENDING",
-      required: true,
     },
     idempotencyKey: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true },

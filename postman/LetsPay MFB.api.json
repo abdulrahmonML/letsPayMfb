@@ -1,0 +1,1037 @@
+{
+  "info": {
+    "_postman_id": "df447a4a-6df1-4b64-bf7e-fbd515c3b482",
+    "name": "LetsPay MFB",
+    "description": "LetsPay MFB — Mini Fintech API\n\nA REST API for a fictional microfinance bank built with Node.js,  \nExpress, and MongoDB. Integrates with the NIBSS by Phoenix API  \nfor identity management, account creation, and interbank transfers.\n\nBase URL: {{baseUrl}}\n\nAuthentication: All protected routes require a Bearer token  \nobtained from the Login endpoint. The token is automatically  \ncaptured via the Login request test script.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53144377",
+    "_collection_link": "https://go.postman.co/collection/53144377-df447a4a-6df1-4b64-bf7e-fbd515c3b482?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": {\r\n    \"firstName\": \"Abdulrahmon\",\r\n    \"lastName\": \"Boluwatife\"\r\n  },\r\n  \"phone\": \"08155497011\",\r\n  \"email\": \"lekanbayy@gmail.com\",\r\n  \"password\": \"password123\",\r\n  \"dob\": \"2000-10-01\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Registers a new user on LetsPay MFB. The system automatically  \ngenerates a unique NIN, registers it with NIBSS, and creates  \na bank account for the user. Returns user details and account  \ninformation on success.\n\nRole: Public  \nMethod: POST  \nURL: /api/auth/register\n\nPossible errors:\n\n- 400: User already exists\n    \n- 500: Failed to generate unique NIN after max attempts"
+          },
+          "response": [
+            {
+              "name": "Register user",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": {\r\n    \"firstName\": \"Abdulrahmon\",\r\n    \"lastName\": \"Boluwatife\"\r\n  },\r\n  \"phone\": \"08155497011\",\r\n  \"email\": \"lekanbayy@gmail.com\",\r\n  \"password\": \"password123\",\r\n  \"dob\": \"2000-10-01\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "77"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"4d-3uP0zDa8hCzDCKezfO6y/BvmCMM\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 09:03:17 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"User Boluwatife Abdulrahmon created successfully\"\n}"
+            },
+            {
+              "name": "Register user",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": {\r\n    \"firstName\": \"Abdulrahmon\",\r\n    \"lastName\": \"Boluwatife\"\r\n  },\r\n  \"phone\": \"08155497011\",\r\n  \"email\": \"lekanbayy@gmail.com\",\r\n  \"password\": \"password123\",\r\n  \"dob\": \"2000-10-01\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "72"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"48-0pQsWOvn98z323Ghu/7eDH83c88\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 10:03:19 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"error\",\n    \"message\": \"User exists, Kindly login to your account\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.environment.set(\"token\", response.token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"email\": \"lekanbayy@gmail.com\",\r\n\"password\": \"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticates a registered user and returns a JWT token.  \nThe token is automatically saved to the environment variable  \n\"token\" via the Tests script.\n\nRole: Public  \nMethod: POST  \nURL: /api/auth/login\n\nPossible errors:\n\n- 400: Invalid credentials\n    \n- 400: All fields are required"
+          },
+          "response": [
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"email\": \"lekanbayy@gmail.com\",\r\n\"password\": \"password123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "295"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"127-ckhMDVm04L8Bd6Iy4D4MTIl1d9c\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 09:07:18 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZjA3N2QyMDczZjczMTY2ZWNhMzhjYyIsImlhdCI6MTc3NzM2NzIzOCwiZXhwIjoxNzc3NDUzNjM4fQ.l_yriZjIenvYSXaTfW2uhDTXbYQgEOTWUcSD3GUxxfU\",\n    \"user\": {\n        \"name\": {\n            \"firstName\": \"Abdulrahmon\",\n            \"lastName\": \"Boluwatife\"\n        }\n    }\n}"
+            },
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n\"email\": \"lekanbayy@gmail.com\",\r\n\"password\": \"password12345\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "50"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"32-nHlhgoBn2rOjY/pQURBWBfOmom4\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 10:04:08 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"error\",\n    \"message\": \"Invalid credentials\"\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Handles user registration and authentication.  \nAll routes in this folder are public — no token required."
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Transfer Money",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"to\": \"2808832424\",\r\n    \"amount\": 1000\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/transfer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "transfer"
+              ]
+            },
+            "description": "Initiates a fund transfer from the authenticated user's account  \nto a recipient account. Performs name enquiry, balance  \nreconciliation, duplicate detection via idempotency key, and  \nupdates transaction records automatically.\n\nRole: Authenticated user  \nMethod: POST  \nURL: /api/transactions/transfer\n\nOn success:\n\n- Transaction record created with status SUCCESS\n    \n- Sender balance updated\n    \n- Transaction reference returned for tracking\n    \n\nPossible errors:\n\n- 400: Insufficient funds\n    \n- 400: Recipient account not found\n    \n- 400: Transfer failed\n    \n- 401: Unauthorized, token missing\n    \n- 409: Duplicate transfer detected"
+          },
+          "response": [
+            {
+              "name": "Transfer Money",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"to\": \"2808832424\",\r\n    \"amount\": 1000\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/transactions/transfer",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "transactions",
+                    "transfer"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "319"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"13f-REyRHiZ+ppbQFyN1w2/4IwO3IlY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 09:29:11 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Transfer successful\",\n    \"transactionRef\": \"LPMFB-260428-1UKFN\",\n    \"sessionId\": \"TX1777368549246\",\n    \"status\": \"SUCCESS\",\n    \"amount\": 1000,\n    \"sender\": {\n        \"accountNumber\": \"2805632115\",\n        \"balance\": 12000\n    },\n    \"recipient\": {\n        \"name\": \"Abdulrahmon Abdulganiu\",\n        \"accountNumber\": \"2808832424\"\n    },\n    \"timestamp\": \"2026-04-28T09:29:08.168Z\"\n}"
+            },
+            {
+              "name": "Transfer Money",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"to\": \"2808832424\",\r\n    \"amount\": 100000\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/transactions/transfer",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "transactions",
+                    "transfer"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "49"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"31-UkO0tVtFgShz7DllhXTCfS9WXPM\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 10:05:21 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"error\",\n    \"message\": \"Insufficient funds\"\n}"
+            },
+            {
+              "name": "Transfer Money",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"to\": \"0000000000\",\r\n    \"amount\": 100000\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/transactions/transfer",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "transactions",
+                    "transfer"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "84"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"54-v25jG5DO4cVEQyEbDX6FFXA9DgU\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 10:06:00 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"error\",\n    \"message\": \"Unable to verify recipient account. Please try again.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Transaction History",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions"
+              ]
+            },
+            "description": "Returns all transactions associated with the authenticated  \nuser's account. Supports pagination and filtering.\n\nRole: Authenticated user  \nMethod: GET  \nURL: /api/transactions\n\nQuery Parameters:\n\n- status: Filter by PENDING, SUCCESS, or FAILED\n    \n- page: Page number (default: 1)\n    \n- limit: Results per page (default: 10)\n    \n\nPossible errors:\n\n- 401: Unauthorized, token missing"
+          },
+          "response": [
+            {
+              "name": "Get Transaction History",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/transactions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "transactions"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1198"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"4ae-qAI4Au4CrWbV+mH9eKY0cmKw9Pk\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 09:35:00 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Transactions retrieved successfully\",\n    \"data\": [\n        {\n            \"sender\": {\n                \"name\": \"Abdulrahmon Boluwatife\",\n                \"acctNo\": \"2805632115\"\n            },\n            \"recipient\": {\n                \"name\": \"Abdulrahmon Abdulganiu\",\n                \"acctNo\": \"2808832424\"\n            },\n            \"_id\": \"69f07de478692f447b19a139\",\n            \"accountId\": \"69f077d5073f73166eca38ce\",\n            \"nibssTransactionId\": \"TX1777368549246\",\n            \"transactionRef\": \"LPMFB-260428-1UKFN\",\n            \"amount\": 1000,\n            \"type\": \"sendMoney\",\n            \"status\": \"SUCCESS\",\n            \"createdAt\": \"2026-04-28T09:29:08.168Z\"\n        },\n        {\n            \"sender\": {\n                \"name\": \"Abdulrahmon Boluwatife\",\n                \"acctNo\": \"2805632115\"\n            },\n            \"recipient\": {\n                \"name\": \"Abdulrahmon Abdulganiu\",\n                \"acctNo\": \"2808832424\"\n            },\n            \"_id\": \"69f07caf0c2cf73f6c382437\",\n            \"accountId\": \"69f077d5073f73166eca38ce\",\n            \"nibssTransactionId\": \"TX1777368241143\",\n            \"transactionRef\": \"LPMFB-260428-MZ8AL\",\n            \"amount\": 1000,\n            \"type\": \"sendMoney\",\n            \"status\": \"SUCCESS\",\n            \"createdAt\": \"2026-04-28T09:23:59.725Z\"\n        },\n        {\n            \"sender\": {\n                \"name\": \"Abdulrahmon Boluwatife\",\n                \"acctNo\": \"2805632115\"\n            },\n            \"recipient\": {\n                \"name\": \"Abdulrahmon Abdulganiu\",\n                \"acctNo\": \"2808832424\"\n            },\n            \"_id\": \"69f07c9e0c2cf73f6c382436\",\n            \"accountId\": \"69f077d5073f73166eca38ce\",\n            \"nibssTransactionId\": \"TX1777368223488\",\n            \"transactionRef\": \"LPMFB-260428-56O2G\",\n            \"amount\": 1000,\n            \"type\": \"sendMoney\",\n            \"status\": \"SUCCESS\",\n            \"createdAt\": \"2026-04-28T09:23:42.113Z\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Transaction By Reference",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/LPMFB-260428-1UKFN",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "LPMFB-260428-1UKFN"
+              ]
+            },
+            "description": "Retrieves a specific transaction by its reference number  \n(e.g. LPMFB-260426-69NNS). Reconciles transaction status  \nwith NIBSS before returning to ensure accuracy.\n\nRole: Authenticated user  \nMethod: GET  \nURL: /api/transactions/:ref\n\nPossible errors:\n\n- 401: Unauthorized, token missing\n    \n- 404: Transaction not found"
+          },
+          "response": [
+            {
+              "name": "Get Transaction By Reference",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/transactions/LPMFB-260428-1UKFN",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "transactions",
+                    "LPMFB-260428-1UKFN"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "367"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"16f-cMzMJhygI6jea7IUkG3uxGoBC6E\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 09:42:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"messasge\": \"Transaction fetched successfully\",\n    \"data\": {\n        \"transactionId\": \"TX1777368549246\",\n        \"transactionRef\": \"LPMFB-260428-1UKFN\",\n        \"status\": \"SUCCESS\",\n        \"amount\": 1000,\n        \"sender\": {\n            \"name\": \"Abdulrahmon Boluwatife\",\n            \"acctNo\": \"2805632115\"\n        },\n        \"recipient\": {\n            \"name\": \"Abdulrahmon Abdulganiu\",\n            \"acctNo\": \"2808832424\"\n        },\n        \"timestamp\": \"2026-04-28T09:29:08.168Z\",\n        \"type\": \"sendMoney\"\n    }\n}"
+            },
+            {
+              "name": "Get Transaction By Reference",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/transactions/LPMFB-000000-XXXXX",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "transactions",
+                    "LPMFB-000000-XXXXX"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "52"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"34-1QD1sN2uEvv10TTEQBeE8tly0Ao\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 10:07:23 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"error\",\n    \"message\": \"Transaction not found\"\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Handles fund transfers and transaction history for the  \nauthenticated user. All routes require a Bearer token."
+    },
+    {
+      "name": "Account",
+      "item": [
+        {
+          "name": "Get Account Balance",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/account/balance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "account",
+                "balance"
+              ]
+            },
+            "description": "Returns the current balance for the authenticated user's account.  \nBalance is reconciled with NIBSS before returning.\n\nRole: Authenticated user  \nMethod: GET  \nURL: /api/account/balance\n\nPossible errors:\n\n- 401: Unauthorized, token missing\n    \n- 404: Account not found"
+          },
+          "response": [
+            {
+              "name": "Get Account Balance",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/account/balance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "account",
+                    "balance"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "123"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"7b-ZZt+VcMvbzHjjTb2SaeSfd7xGGc\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 09:11:07 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Account balance fetched\",\n    \"data\": {\n        \"accountNumber\": \"2805632115\",\n        \"balance\": 15000,\n        \"currency\": \"NGN\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Account Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/account",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "account"
+              ]
+            },
+            "description": "Returns the authenticated user's account details including  \naccount number, account name, bank details, and current balance.  \nBalance is reconciled with NIBSS before returning to ensure  \naccuracy.\n\nRole: Authenticated user  \nMethod: GET  \nURL: /api/account\n\nPossible errors:\n\n- 401: Unauthorized, token missing\n    \n- 404: Account record not found"
+          },
+          "response": [
+            {
+              "name": "Get Account Details",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/account",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "account"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "200"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"c8-lU/9czh/HuKrH4FpWYPqYWGZSwQ\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 09:12:35 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Account details fetched successfully\",\n    \"data\": {\n        \"accountNumber\": \"2805632115\",\n        \"accountName\": \"Abdulrahmon Boluwatife\",\n        \"balance\": 15000,\n        \"bankCode\": \"280\",\n        \"bankName\": \"LetsPay MFB\"\n    }\n}"
+            },
+            {
+              "name": "Get Account Details",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/account",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "account"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "42"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"2a-tkTTLsZGxenss6or/BOJ2zMDyLE\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 28 Apr 2026 10:08:54 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Unauthorized, token missing!\"\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Manages account details and balance for the authenticated user.  \nAll routes require a Bearer token."
+    }
+  ]
+}
