@@ -257,7 +257,7 @@ All errors follow a consistent format:
 
 ```json
 {
-  "success": false,
+  "status": "error",
   "message": "Descriptive error message here"
 }
 ```
