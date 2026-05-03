@@ -1,24 +1,22 @@
-const transporter = require("../email/mailer");
 require("dotenv").config();
 
-const sendEmail = async ({ to, subject, text, html }) => {
-  try {
-    const info = await transporter.sendMail({
-      from: ` "userRegister" ${process.env.EMAIL_USER}`,
-      to,
-      subject,
-      text,
-      html,
-    });
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-    console.log("Email sent successfully");
-    console.log(info.response);
+const sendEmail = async ({ to, subject, html }) => {
+  const { data, error } = await resend.emails.send({
+    from: "LetsPay MFB <onboarding@resend.dev>",
+    to,
+    subject,
+    html,
+  });
 
-    return info;
-  } catch (error) {
-    console.error("Email sending Failed", error.message);
-    throw error;
+  if (error) {
+    console.error("Resend error:", error);
+    return;
   }
+
+  console.log("Email sent successfully:", data);
 };
 
 module.exports = sendEmail;
