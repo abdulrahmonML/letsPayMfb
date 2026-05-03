@@ -19,4 +19,13 @@ const nibssRequest = async () => {
   });
 };
 
-module.exports = nibssRequest;
+const nibssPublicRequest = () => {
+  return axios.create({
+    baseURL: NIBSS_BASE_URL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+module.exports = { nibssRequest, nibssPublicRequest };

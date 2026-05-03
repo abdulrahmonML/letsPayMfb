@@ -7,6 +7,7 @@ const nibssService = require("../services/nibssService");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
+const sendEmail = require("../services/emailService");
 
 const register = async (firstName, lastName, phone, email, password, dob) => {
   //check if user exist
@@ -31,14 +32,17 @@ const register = async (firstName, lastName, phone, email, password, dob) => {
   });
 
   //create nin
-  const generatedNin = await generateUniqueNin(firstName, lastName, dob);
-
-  const nin = generatedNin;
-  const kycType = "nin";
+  const nin = await generateUniqueNin(firstName, lastName, dob);
 
   // create account
 
-  const nibssAccount = await nibssService.createAccount(kycType, nin, dob);
+  let nibssAccount;
+
+  try {
+    nibssAccount = await nibssService.createAccount("nin", nin, dob);
+  } catch (error) {
+    throw new AppError("Unable to create Account. Please try again.", 500);
+  }
 
   // SAVE nin details
   const ninDetails = await Nin.create({

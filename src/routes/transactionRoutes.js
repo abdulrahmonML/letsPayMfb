@@ -9,7 +9,11 @@ const {
   getTransactionByReference,
 } = require("../controllers/transactionController");
 
-router.post("/transfer", protect, transferMoney);
+const validate = require("../middleware/validate");
+
+const transferSchema = require("../validators/transferValidator");
+
+router.post("/transfer", protect, validate(transferSchema), transferMoney);
 router.get("/", protect, getTransactionsByAccount);
 router.get("/:id", protect, getTransactionByReference);
 

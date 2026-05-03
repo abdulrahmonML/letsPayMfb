@@ -2,7 +2,7 @@ const accountService = require("../services/accountService");
 
 const getAccountDetails = async (req, res, next) => {
   try {
-    const accountId = req.user.accountId;
+    const { accountId } = req.user;
     const name = `${req.user.name.firstName} ${req.user.name.lastName}`;
 
     const account = await accountService.fetchAccountDetails(accountId, name);
@@ -19,7 +19,7 @@ const getAccountDetails = async (req, res, next) => {
 
 const getAccountBalance = async (req, res) => {
   try {
-    const accountId = req.user.accountId;
+    const { accountId } = req.user;
 
     const balance = await accountService.fetchBalance(accountId);
 

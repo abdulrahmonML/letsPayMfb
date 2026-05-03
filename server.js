@@ -7,6 +7,7 @@ const authRoutes = require("./src/routes/authRoutes");
 const transactionRoutes = require("./src/routes/transactionRoutes");
 const accountRoutes = require("./src/routes/accountRoutes");
 const errorHandler = require("./src/middleware/errorHandler");
+const AppError = require("./src/utils/appError");
 
 app.use(express.json());
 
@@ -19,6 +20,12 @@ CONNECTDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/account", accountRoutes);
+
+// 404 handler
+app.use((req, res, next) => {
+  const error = new AppError(`Route ${req.originalUrl} not found`, 404);
+  next(error);
+});
 
 //error handler
 app.use(errorHandler);

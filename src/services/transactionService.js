@@ -1,3 +1,5 @@
+const transferEmailTemplate = require("../email/templates");
+const sendEmail = require("../services/emailService");
 const Account = require("../models/account");
 const Transaction = require("../models/transaction");
 const AppError = require("../utils/appError");
@@ -5,7 +7,30 @@ const generateRef = require("../utils/generateReference");
 const nibssService = require("../services/nibssService");
 
 const transfer = async (accountId, to, amount) => {
+  //GET SENDER DETAILS
+  const sender = await Account.findById(accountId).populate({
+    path: "userId",
+    select: "name.firstName name.lastName email",
+  });
+
+  if (!sender || !sender.acctNo) {
+    throw new AppError(
+      `Sender Account 
+       not found: Kindly check account Number and try again.`,
+      404,
+    );
+  }
+
+  const from = sender.acctNo;
+  const senderEmail = sender.userId.email;
+
+  // PREVENT SELF TRANSFER
+  if (from === to) {
+    throw new AppError("You cannot transfer to your own account", 400);
+  }
+
   // VERIFY RECIPIENT EXISTS WITH A CORRECT ACCOUNT
+
   let validBeneficiary;
   try {
     validBeneficiary = await nibssService.nameEnquiry(to);
@@ -25,22 +50,6 @@ const transfer = async (accountId, to, amount) => {
       404,
     );
   }
-
-  //GET SENDER DETAILS
-  const sender = await Account.findById(accountId).populate({
-    path: "userId",
-    select: "name.firstName name.lastName",
-  });
-
-  if (!sender.acctNo) {
-    throw new AppError(
-      `Sender Account 
-       not found: Kindly check account Number and try again.`,
-      404,
-    );
-  }
-
-  const from = sender.acctNo;
 
   //GENERATE IDEMPOTENCYKEY
   const idempotencyKey = `${from}${to}${amount}${sender.userId.name.firstName}`;
@@ -63,7 +72,7 @@ const transfer = async (accountId, to, amount) => {
   } catch (error) {
     throw new AppError(
       "Unable to verify account balance. Please try again.",
-      400,
+      500,
     );
   }
 
@@ -105,7 +114,7 @@ const transfer = async (accountId, to, amount) => {
   } catch (error) {
     transaction.status = "FAILED";
     await transaction.save();
-    throw new AppError("Transfer failed. Please try again.", 400);
+    throw new AppError("Transfer failed. Please try again.", 500);
   }
 
   const currentBalance = sender.balance;
@@ -119,6 +128,21 @@ const transfer = async (accountId, to, amount) => {
     await transaction.save();
     sender.balance = currentBalance - amount;
     await sender.save();
+
+    //SEND EMAIL ON SUCCESSFUL  TRANSFER
+    sendEmail({
+      to: senderEmail, // where do you get the sender's email from?
+      subject: "Transfer Successful - LetsPay MFB",
+      html: transferEmailTemplate({
+        transactionRef: transaction.transactionRef,
+        amount: amount,
+        recipientName: beneficiaryName,
+        recipientAccountNumber: beneficiaryAcct,
+        recipientBank: process.env.FINTECH_NAME,
+        newBalance: sender.balance,
+        timestamp: transaction.createdAt,
+      }),
+    }).catch((err) => console.error(err));
   } else {
     transaction.status = "FAILED";
     await transaction.save();
@@ -177,7 +201,7 @@ const fetchTransactionByRefeference = async (id) => {
   } catch (error) {
     throw new AppError(
       "Unable to fetch Transaction status. Please try again.",
-      400,
+      500,
     );
   }
 

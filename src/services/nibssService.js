@@ -1,18 +1,9 @@
 // ALL NIBSS API CALLS
 
-const nibssRequest = require("../config/nibss");
+const { nibssRequest, nibssPublicRequest } = require("../config/nibss");
 
 // in nibssService.js
 const axios = require("axios");
-
-const nibssPublicRequest = () => {
-  return axios.create({
-    baseURL: process.env.NIBSS_BASE_URL,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-};
 
 const insertBvn = async (bvn, firstName, lastName, dob) => {
   const client = nibssPublicRequest(); // no token
