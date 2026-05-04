@@ -1,6 +1,16 @@
 # 💸 LetsPay MFB API
 
+![Status](https://img.shields.io/badge/status-live-brightgreen) ![Node](https://img.shields.io/badge/node-v18-blue) ![Express](https://img.shields.io/badge/express-v5-lightgrey)
+
 A REST API for a fictional microfinance bank built with Node.js, Express, and MongoDB. Integrates with the NIBSS by Phoenix API for identity management, account creation, and interbank fund transfers.
+
+## 🌐 Live API
+
+**Base URL:** https://letspaymfb.onrender.com
+
+> **Note:** Hosted on Render's free tier. The server spins down after 15 minutes of inactivity — the first request may take 30-60 seconds to respond while it spins back up.
+
+> **Note on emails:** Transactional emails are powered by Resend. On the free tier without a verified domain, emails only deliver to the verified account email. Use the same email used to set up Resend when testing to receive notifications.
 
 ---
 
@@ -152,7 +162,7 @@ npm run dev
 npm start
 ```
 
-Server starts on `http://localhost:3000`
+Server starts on `http://localhost:5000`
 
 ---
 
@@ -257,7 +267,7 @@ All errors follow a consistent format:
 
 ```json
 {
-  "status": "error",
+  "success": false,
   "message": "Descriptive error message here"
 }
 ```
@@ -279,14 +289,14 @@ A complete Postman collection is included in the `/postman` directory.
 1. Open Postman
 2. Click **Import**
 3. Select `postman/letspay-mfb-api.json`
-4. Create an environment with `baseUrl` set to `http://localhost:3000`
+4. Create an environment with `baseUrl` set to `https://letspaymfb.onrender.com`
 5. Run **Login** first — token is automatically saved to your environment
 
 ---
 
 ## 👨‍💻 Author
 
-**Abdulrahmon** — [GitHub](https://github.com/abdulrahmonML/letsPayMfb)
+**Abdulrahmon** — [GitHub](https://github.com/abdulrahmonML)
 
 ---
 
