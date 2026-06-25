@@ -8,6 +8,14 @@ const transactionRoutes = require("./src/routes/transactionRoutes");
 const accountRoutes = require("./src/routes/accountRoutes");
 const errorHandler = require("./src/middleware/errorHandler");
 const AppError = require("./src/utils/appError");
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "http://localhost:5174",
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 
