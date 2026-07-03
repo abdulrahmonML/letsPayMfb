@@ -1,6 +1,7 @@
 const nibssService = require("../services/nibssService");
 const Account = require("../models/account");
 require("dotenv").config;
+const AppError = require("../utils/appError");
 
 const fetchAccountDetails = async (accountId, name) => {
   //Find account in database by userId
@@ -62,7 +63,24 @@ const fetchBalance = async (accountId) => {
   };
 };
 
+const nameEnquiry = async (accountNumber) => {
+  try {
+    const name = await nibssService.nameEnquiry(accountNumber);
+  } catch (error) {
+    throw new AppError(
+      "Unable to fetch recipient Name. Please try again.",
+      500,
+    );
+  }
+  return {
+    accountNumber: name.accountNumber,
+    accountName: name.accountName,
+    bank: name.bank,
+  };
+};
+
 module.exports = {
   fetchAccountDetails,
   fetchBalance,
+  nameEnquiry,
 };
