@@ -63,24 +63,25 @@ const fetchBalance = async (accountId) => {
   };
 };
 
-const nameEnquiry = async (accountNumber) => {
+const recipientName = async (accountNumber) => {
   try {
-    const name = await nibssService.nameEnquiry(accountNumber);
+    const result = await nibssService.nameEnquiry(accountNumber);
+
+    return {
+      accountNumber: result.accountNumber,
+      accountName: result.accountName,
+      bank: result.bank,
+    };
   } catch (error) {
     throw new AppError(
       "Unable to fetch recipient Name. Please try again.",
       500,
     );
   }
-  return {
-    accountNumber: name.accountNumber,
-    accountName: name.accountName,
-    bank: name.bank,
-  };
 };
 
 module.exports = {
   fetchAccountDetails,
   fetchBalance,
-  nameEnquiry,
+  recipientName,
 };

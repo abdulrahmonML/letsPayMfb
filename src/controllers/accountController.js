@@ -33,11 +33,11 @@ const getAccountBalance = async (req, res, next) => {
   }
 };
 
-const nameEnquiry = async (req, res, next) => {
+const getRecipientName = async (req, res, next) => {
   try {
     const { accountNumber } = req.body;
 
-    const name = await accountService.nameEnquiry(accountNumber);
+    const name = await accountService.recipientName(accountNumber);
 
     return res.status(200).json({
       success: true,
@@ -49,4 +49,4 @@ const nameEnquiry = async (req, res, next) => {
   }
 };
 
-module.exports = { getAccountDetails, getAccountBalance, nameEnquiry };
+module.exports = { getAccountDetails, getAccountBalance, getRecipientName };

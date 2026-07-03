@@ -6,11 +6,11 @@ const protect = require("../middleware/protect");
 const {
   getAccountDetails,
   getAccountBalance,
-  nameEnquiry,
+  getRecipientName,
 } = require("../controllers/accountController");
 
 router.get("/", protect, getAccountDetails);
 router.get("/balance", protect, getAccountBalance);
-router.post("/name-enquiry", protect, nameEnquiry);
+router.post("/name-enquiry", protect, getRecipientName);
 
 module.exports = router;

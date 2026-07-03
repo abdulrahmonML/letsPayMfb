@@ -100,7 +100,6 @@ const getTransactionStatus = async (transactionId) => {
 };
 
 module.exports = {
-  /* insertBvn, */
   insertNin,
   createAccount,
   nameEnquiry,
