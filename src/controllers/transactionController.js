@@ -11,13 +11,15 @@ const transferMoney = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Transfer successful",
-      transactionRef: response.transactionRef,
-      sessionId: response.sessionId,
-      status: response.status,
-      amount: amount,
-      sender: response.sender,
-      recipient: response.recipient,
-      timestamp: response.timestamp,
+      data: {
+        transactionRef: response.transactionRef,
+        sessionId: response.sessionId,
+        status: response.status,
+        amount: amount,
+        sender: response.sender,
+        recipient: response.recipient,
+        timestamp: response.timestamp,
+      },
     });
   } catch (error) {
     next(error);
