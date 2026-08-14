@@ -26,7 +26,7 @@ const transactionSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      emum: ["sendMoney", "recieveMoney"],
+      enum: ["sendMoney", "receiveMoney"],
     },
     status: {
       type: String,

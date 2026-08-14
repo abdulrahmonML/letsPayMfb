@@ -14,7 +14,7 @@ const register = async (firstName, lastName, phone, email, password, dob) => {
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    throw new AppError("User exists, Kindly login to your account", 400);
+    throw new AppError("User exists, Kindly login to your account", 409);
   }
 
   //create user

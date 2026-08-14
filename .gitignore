@@ -2,3 +2,9 @@ node_modules
 app.txt
 .env
 package-lock.json
+tsconfig.json
+jest.config.js
+jest.setup.js
+babel.config.js
+env.test
+tests

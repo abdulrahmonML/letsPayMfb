@@ -70,10 +70,7 @@ const transfer = async (accountId, to, amount) => {
   try {
     senderNibssBalance = await nibssService.getBalance(from);
   } catch (error) {
-    throw new AppError(
-      "Unable to verify account balance. Please try again.",
-      500,
-    );
+    console.log("NIBSS Balance Sync Failed:", error.message);
   }
 
   if (senderNibssBalance.balance !== sender.balance) {
@@ -94,7 +91,7 @@ const transfer = async (accountId, to, amount) => {
     accountId: sender._id,
     transactionRef,
     amount: amount,
-    type: "sendMoney",
+    type: "DEBIT",
     sender: {
       name: `${sender.userId.name.firstName} ${sender.userId.name.lastName}`,
       acctNo: from,
