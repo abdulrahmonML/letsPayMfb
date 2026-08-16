@@ -1,7 +1,11 @@
-const AppError = require("../utils/appError");
+import { Request, Response, NextFunction } from "express";
+import { ObjectSchema } from "joi";
+import AppError from "../utils/appError";
 
-const validate = (schema, source = "body") => {
-  return (req, res, next) => {
+type ValidationSource = "body" | "query";
+
+const validate = (schema: ObjectSchema, source: ValidationSource = "body") => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     const data = source === "query" ? req.query : req.body;
 
     const { error, value } = schema.validate(data, {
@@ -10,11 +14,12 @@ const validate = (schema, source = "body") => {
     });
 
     if (error) {
-      const errorMessage = error.details.map((detail) => detail.message);
-      return next(new AppError(errorMessage, 400)); // not throw
+      const errorMessage = error.details
+        .map((detail) => detail.message)
+        .join(", ");
+      return next(new AppError(errorMessage, 400));
     }
 
-    // Replace the source with the clean validated data
     if (source === "query") {
       req.query = value;
     } else {
@@ -25,4 +30,4 @@ const validate = (schema, source = "body") => {
   };
 };
 
-module.exports = validate;
+export default validate;

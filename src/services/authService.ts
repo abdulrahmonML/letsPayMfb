@@ -1,50 +1,52 @@
-const AppError = require("../utils/appError");
-const User = require("../models/user");
-const Nin = require("../models/nin");
-const Account = require("../models/account");
-const generateUniqueNin = require("../utils/generateNin");
-const nibssService = require("../services/nibssService");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-require("dotenv").config();
-const sendEmail = require("../services/emailService");
+import AppError from "../utils/appError";
+import User from "../models/user";
+import Nin from "../models/nin";
+import Account from "../models/account";
+import generateUniqueNin from "../utils/generateNin";
+import * as nibssService from "../services/nibssService";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import "dotenv/config";
+import { INin, IAccount, IUser, LoginResult } from "../types";
 
-const register = async (firstName, lastName, phone, email, password, dob) => {
-  //check if user exist
+interface RegisterResult {
+  ninDetails: INin;
+  accountDetails: IAccount;
+  user: IUser;
+}
+
+
+const register = async (
+  firstName: string,
+  lastName: string,
+  phone: string,
+  email: string,
+  password: string,
+  dob: string,
+): Promise<RegisterResult> => {
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
     throw new AppError("User exists, Kindly login to your account", 409);
   }
 
-  //create user
-
-  // password hashed in model.
   const user = await User.create({
-    name: {
-      firstName,
-      lastName,
-    },
+    name: { firstName, lastName },
     phone,
     email,
     password,
     dob,
   });
 
-  //create nin
   const nin = await generateUniqueNin(firstName, lastName, dob);
 
-  // create account
-
   let nibssAccount;
-
   try {
     nibssAccount = await nibssService.createAccount("nin", nin, dob);
   } catch (error) {
     throw new AppError("Unable to create Account. Please try again.", 500);
   }
 
-  // SAVE nin details
   const ninDetails = await Nin.create({
     user: user._id,
     ninNo: nin,
@@ -66,8 +68,10 @@ const register = async (firstName, lastName, phone, email, password, dob) => {
   return { ninDetails, accountDetails, user };
 };
 
-//LOGIN SERVICE
-const login = async (email, password) => {
+const login = async (
+  email: string,
+  password: string,
+): Promise<LoginResult> => {
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -79,20 +83,22 @@ const login = async (email, password) => {
   if (!correctPassword) {
     throw new AppError("Invalid credentials", 400);
   }
-  const token = jwt.sign(
-    {
-      id: user._id,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN },
-  );
+
+  if (!process.env.JWT_SECRET) {
+    throw new AppError("Server misconfiguration", 500);
+  }
+
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
 
   return {
-    token: token,
+    token,
     user: {
       name: user.name,
+      email: user.email,
     },
   };
 };
 
-module.exports = { register, login };
+export { register, login };

@@ -1,14 +1,20 @@
-const transferEmailTemplate = require("../email/templates");
-const sendEmail = require("../services/emailService");
-const Account = require("../models/account");
-const Transaction = require("../models/transaction");
-const AppError = require("../utils/appError");
-const generateRef = require("../utils/generateReference");
-const nibssService = require("../services/nibssService");
+import transferEmailTemplate from "../email/templates";
+import sendEmail from "./emailService";
+import Account from "../models/account";
+import Transaction from "../models/transaction";
+import AppError from "../utils/appError";
+import generateRef from "../utils/generateReference";
+import * as nibssService from "./nibssService";
+import { TransferResult, ITransaction } from "../types";
 
-const transfer = async (accountId, to, amount) => {
-  //GET SENDER DETAILS
-  const sender = await Account.findById(accountId).populate({
+const transfer = async (
+  accountId: string,
+  to: string,
+  amount: number,
+): Promise<TransferResult | ITransaction> => {
+  const sender = await Account.findById(accountId).populate<{
+    userId: { name: { firstName: string; lastName: string }; email: string };
+  }>({
     path: "userId",
     select: "name.firstName name.lastName email",
   });
@@ -24,12 +30,9 @@ const transfer = async (accountId, to, amount) => {
   const from = sender.acctNo;
   const senderEmail = sender.userId.email;
 
-  // PREVENT SELF TRANSFER
   if (from === to) {
     throw new AppError("You cannot transfer to your own account", 400);
   }
-
-  // VERIFY RECIPIENT EXISTS WITH A CORRECT ACCOUNT
 
   let validBeneficiary;
   try {
@@ -51,42 +54,36 @@ const transfer = async (accountId, to, amount) => {
     );
   }
 
-  //GENERATE IDEMPOTENCYKEY
   const idempotencyKey = `${from}${to}${amount}${sender.userId.name.firstName}`;
 
-  //CHECK IF KEY EXISTS WITHIN THE LAST 30mins TO PREVENT DUPLICATE TRANSFERS
   const existingTransaction = await Transaction.findOne({
     idempotencyKey,
-    status: "PENDING", // only block if still processing
-    createdAt: { $gt: new Date(Date.now() - 30 * 60 * 1000) }, // more than 30mins,
+    status: "PENDING",
+    createdAt: { $gt: new Date(Date.now() - 30 * 60 * 1000) },
   });
 
   if (existingTransaction) {
-    return existingTransaction; // duplicate — return original result
+    return existingTransaction;
   }
 
-  //RECONCILE BALANCE WITH NIBSS TO MAKE SURE BALANCE IS CORRECT
   let senderNibssBalance;
   try {
     senderNibssBalance = await nibssService.getBalance(from);
   } catch (error) {
-    console.log("NIBSS Balance Sync Failed:", error.message);
+    console.log("NIBSS Balance Sync Failed:", (error as Error).message);
   }
 
-  if (senderNibssBalance.balance !== sender.balance) {
+  if (senderNibssBalance && senderNibssBalance.balance !== sender.balance) {
     sender.balance = senderNibssBalance.balance;
     await sender.save();
   }
 
-  // CHECK SUFFICIENT FUNDS
   if (amount > sender.balance) {
     throw new AppError("Insufficient funds", 400);
   }
 
-  //GENERATE TRANSACTION REFERENCE
   const transactionRef = generateRef();
 
-  //CREATE TRANSACTION RECORD
   const transaction = await Transaction.create({
     accountId: sender._id,
     transactionRef,
@@ -104,7 +101,6 @@ const transfer = async (accountId, to, amount) => {
     idempotencyKey: idempotencyKey,
   });
 
-  //CALL NIBSS TRANSFER SERVICE TO TRANSFER
   let nibssTransfer;
   try {
     nibssTransfer = await nibssService.transfer(from, to, amount);
@@ -117,25 +113,22 @@ const transfer = async (accountId, to, amount) => {
   const currentBalance = sender.balance;
   const transactionId = nibssTransfer.reference;
 
-  //UPDATE BALANCE IF SUCCESS
   if (nibssTransfer.status === "SUCCESS") {
     transaction.nibssTransactionId = transactionId;
-
     transaction.status = "SUCCESS";
     await transaction.save();
     sender.balance = currentBalance - amount;
     await sender.save();
 
-    //SEND EMAIL ON SUCCESSFUL  TRANSFER
     sendEmail({
-      to: senderEmail, // where do you get the sender's email from?
+      to: senderEmail,
       subject: "Transfer Successful - LetsPay MFB",
       html: transferEmailTemplate({
         transactionRef: transaction.transactionRef,
         amount: amount,
         recipientName: beneficiaryName,
         recipientAccountNumber: beneficiaryAcct,
-        recipientBank: process.env.FINTECH_NAME,
+        recipientBank: process.env.FINTECH_NAME || "LetsPay MFB",
         newBalance: sender.balance,
         timestamp: transaction.createdAt,
       }),
@@ -152,7 +145,7 @@ const transfer = async (accountId, to, amount) => {
     amount,
     sender: {
       accountNumber: from,
-      balance: sender.balance, // updated balance after deduction
+      balance: sender.balance,
     },
     recipient: {
       name: beneficiaryName,
@@ -163,8 +156,9 @@ const transfer = async (accountId, to, amount) => {
   };
 };
 
-const fetchTransactionsByAccount = async (accountId) => {
-  // Query for transactions where account is either sender or receiver
+const fetchTransactionsByAccount = async (
+  accountId: string,
+): Promise<ITransaction[]> => {
   const account = await Account.findById(accountId);
   if (!account) throw new AppError("Account not found", 404);
 
@@ -183,7 +177,7 @@ const fetchTransactionsByAccount = async (accountId) => {
   return transaction;
 };
 
-const fetchTransactionByRefeference = async (id) => {
+const fetchTransactionByRefeference = async (id: string) => {
   const transaction = await Transaction.findOne({ transactionRef: id });
 
   if (!transaction) {
@@ -194,7 +188,7 @@ const fetchTransactionByRefeference = async (id) => {
   let nibssTransaction;
 
   try {
-    nibssTransaction = await nibssService.getTransactionStatus(nibssId);
+    nibssTransaction = await nibssService.getTransactionStatus(nibssId!);
   } catch (error) {
     throw new AppError(
       "Unable to fetch Transaction status. Please try again.",
@@ -203,7 +197,7 @@ const fetchTransactionByRefeference = async (id) => {
   }
 
   if (nibssTransaction.status !== transaction.status) {
-    transaction.status = nibssTransaction.status;
+    transaction.status = nibssTransaction.status as typeof transaction.status;
     await transaction.save();
   }
 
@@ -219,8 +213,4 @@ const fetchTransactionByRefeference = async (id) => {
   };
 };
 
-module.exports = {
-  transfer,
-  fetchTransactionsByAccount,
-  fetchTransactionByRefeference,
-};
+export { transfer, fetchTransactionsByAccount, fetchTransactionByRefeference };

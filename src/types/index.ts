@@ -110,6 +110,7 @@ export interface LoginResult {
 export interface NameEnquiryResult {
   accountNumber: string;
   accountName: string;
+  bank: string;
 }
 
 // ─── JWT PAYLOAD ──────────────────────────────────────────────────────────────
@@ -128,4 +129,10 @@ export interface AuthenticatedUser {
   accountId: string;
   name: UserName;
   email: string;
+}
+
+export interface BalanceResult {
+  accountNumber: string;
+  balance: number;
+  currency: string;
 }

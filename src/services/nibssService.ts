@@ -1,22 +1,47 @@
 // ALL NIBSS API CALLS
 
-const { nibssRequest, nibssPublicRequest } = require("../config/nibss");
+import { nibssRequest, nibssPublicRequest } from "../config/nibss";
 
-// in nibssService.js
-const axios = require("axios");
+interface NibssAccount {
+  accountNumber: string;
+  balance: number;
+  bankCode: string;
+}
 
-const insertBvn = async (bvn, firstName, lastName, dob) => {
-  const client = nibssPublicRequest(); // no token
-  const response = await client.post("/api/insertBvn", {
-    BVN: bvn,
-    firstName,
-    lastName,
-    dob,
-  });
-  return response.data;
-};
+export interface NibssCreateAccountResponse {
+  account: NibssAccount;
+}
 
-const insertNin = async (nin, firstName, lastName, dob) => {
+export interface NibssNameEnquiryResponse {
+  accountNumber: string;
+  accountName: string;
+  bank: string;
+}
+
+export interface NibssTransferResponse {
+  status: "SUCCESS" | "FAILED";
+  reference: string;
+}
+
+export interface NibssBalanceResponse {
+  balance: number;
+}
+
+interface NibssTransactionStatusResponse {
+  status: string;
+}
+
+interface NibssGenericResponse {
+  success: boolean;
+  message?: string;
+}
+
+const insertNin = async (
+  nin: string,
+  firstName: string,
+  lastName: string,
+  dob: string,
+): Promise<NibssGenericResponse> => {
   const client = await nibssPublicRequest();
 
   const response = await client.post("/api/insertNin", {
@@ -29,7 +54,11 @@ const insertNin = async (nin, firstName, lastName, dob) => {
   return response.data;
 };
 
-const createAccount = async (kycType, kycID, dob) => {
+const createAccount = async (
+  kycType: string,
+  kycID: string,
+  dob: string,
+): Promise<NibssCreateAccountResponse> => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.post("/api/account/create", {
@@ -41,7 +70,9 @@ const createAccount = async (kycType, kycID, dob) => {
   return response.data;
 };
 
-const nameEnquiry = async (accountNumber) => {
+const nameEnquiry = async (
+  accountNumber: string,
+): Promise<NibssNameEnquiryResponse> => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.get(
@@ -51,7 +82,11 @@ const nameEnquiry = async (accountNumber) => {
   return response.data;
 };
 
-const transfer = async (from, to, amount) => {
+const transfer = async (
+  from: string,
+  to: string,
+  amount: number,
+): Promise<NibssTransferResponse> => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.post("/api/transfer", {
@@ -63,7 +98,9 @@ const transfer = async (from, to, amount) => {
   return response.data;
 };
 
-const getBalance = async (accountNumber) => {
+const getBalance = async (
+  accountNumber: string,
+): Promise<NibssBalanceResponse> => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.get(`/api/account/balance/${accountNumber}`);
@@ -71,7 +108,7 @@ const getBalance = async (accountNumber) => {
   return response.data;
 };
 
-const validateBvn = async (bvn) => {
+const validateBvn = async (bvn: string): Promise<NibssGenericResponse> => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.post("/api/validateBvn", {
@@ -81,7 +118,7 @@ const validateBvn = async (bvn) => {
   return response.data;
 };
 
-const validateNin = async (nin) => {
+const validateNin = async (nin: string): Promise<NibssGenericResponse> => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.post("/api/validateNin", {
@@ -91,7 +128,9 @@ const validateNin = async (nin) => {
   return response.data;
 };
 
-const getTransactionStatus = async (transactionId) => {
+const getTransactionStatus = async (
+  transactionId: string,
+): Promise<NibssTransactionStatusResponse> => {
   const nibssApi = await nibssRequest();
 
   const response = await nibssApi.get(`/api/transaction/${transactionId}`);
@@ -99,7 +138,7 @@ const getTransactionStatus = async (transactionId) => {
   return response.data;
 };
 
-module.exports = {
+export {
   insertNin,
   createAccount,
   nameEnquiry,

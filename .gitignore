@@ -8,3 +8,4 @@ jest.setup.js
 babel.config.js
 env.test
 tests
+account

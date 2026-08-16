@@ -1,3 +1,13 @@
+interface TransferEmailTemplateParams {
+  transactionRef: string;
+  amount: number;
+  recipientName: string;
+  recipientAccountNumber: string;
+  recipientBank: string;
+  newBalance: number;
+  timestamp: Date;
+}
+
 const transferEmailTemplate = ({
   transactionRef,
   amount,
@@ -6,7 +16,7 @@ const transferEmailTemplate = ({
   recipientBank,
   newBalance,
   timestamp,
-}) => {
+}: TransferEmailTemplateParams): string => {
   return `
   <!DOCTYPE html>
   <html>
@@ -166,4 +176,4 @@ const transferEmailTemplate = ({
   `;
 };
 
-module.exports = transferEmailTemplate;
+export default transferEmailTemplate;

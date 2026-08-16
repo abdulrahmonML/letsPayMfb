@@ -1,46 +1,58 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
-require("dotenv").config();
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import User from "../models/user";
+import { JwtPayload } from "../types/index";
 
-const protect = async (req, res, next) => {
+const protect = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    let token;
+    let token: string | undefined;
 
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer")) {
       token = authHeader.split(" ")[1];
     }
 
-    //no token
     if (!token) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: "Unauthorized, token missing!",
       });
+      return;
     }
 
-    // verify token sugnature
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) throw new Error("JWT_SECRET is not defined");
 
-    const user = await User.findById(decoded.id).select("-password");
+    const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
+
+    const user = await User.findById(decoded.userId).select("-password");
 
     if (!user) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         message: "User no longer exists",
       });
+      return;
     }
-    //Attach full user to request
-    req.user = user;
 
-    // continue request lifecycle
+    req.user = {
+      userId: decoded.userId,
+      accountId: decoded.accountId,
+      name: decoded.name,
+      email: decoded.email,
+    };
+
     next();
   } catch (error) {
-    return res.status(401).json({
+    res.status(401).json({
       success: false,
       message: "Not authorized, token invalid",
     });
   }
 };
 
-module.exports = protect;
+export default protect;

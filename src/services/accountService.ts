@@ -1,9 +1,13 @@
-const nibssService = require("../services/nibssService");
-const Account = require("../models/account");
-require("dotenv").config;
-const AppError = require("../utils/appError");
+import * as nibssService from "../services/nibssService";
+import Account from "../models/account";
+import AppError from "../utils/appError";
+import { AccountDetails, NameEnquiryResult, BalanceResult } from "../types";
+import { NibssBalanceResponse } from "./nibssService";
 
-const fetchAccountDetails = async (accountId, name) => {
+const fetchAccountDetails = async (
+  accountId: string,
+  name: string,
+): Promise<AccountDetails> => {
   //Find account in database by userId
   const account = await Account.findById(accountId);
   if (!account) {
@@ -11,12 +15,12 @@ const fetchAccountDetails = async (accountId, name) => {
   }
 
   //confirm account balance
-  let nibssAccount;
+  let nibssAccount: NibssBalanceResponse;
   try {
     nibssAccount = await nibssService.getBalance(account.acctNo);
   } catch (error) {
     // If NIBSS is down, fall back to DB balance instead of crashing
-    console.error("NIBSS Balance Sync Failed:", error.message);
+    console.error("NIBSS Balance Sync Failed:", (error as Error).message);
     nibssAccount = { balance: account.balance };
   }
   // Reconcile balance
@@ -34,7 +38,9 @@ const fetchAccountDetails = async (accountId, name) => {
   };
 };
 
-const fetchBalance = async (accountId) => {
+const fetchBalance: (accountId: string) => Promise<BalanceResult> = async (
+  accountId: string,
+) => {
   //Find account in database by userId
   const account = await Account.findById(accountId);
   if (!account) {
@@ -42,12 +48,11 @@ const fetchBalance = async (accountId) => {
   }
 
   //confirm account balance
-  let nibssAccount;
+  let nibssAccount: NibssBalanceResponse;
   try {
     nibssAccount = await nibssService.getBalance(account.acctNo);
   } catch (error) {
-    // If NIBSS is down, fall back to DB balance instead of crashing
-    console.error("NIBSS Balance Sync Failed:", error.message);
+    console.error("NIBSS Balance Sync Failed:", (error as Error).message);
     nibssAccount = { balance: account.balance };
   }
   // Reconcile balance
@@ -63,7 +68,9 @@ const fetchBalance = async (accountId) => {
   };
 };
 
-const recipientName = async (accountNumber) => {
+const recipientName = async (
+  accountNumber: string,
+): Promise<NameEnquiryResult> => {
   try {
     const result = await nibssService.nameEnquiry(accountNumber);
 
@@ -80,8 +87,4 @@ const recipientName = async (accountNumber) => {
   }
 };
 
-module.exports = {
-  fetchAccountDetails,
-  fetchBalance,
-  recipientName,
-};
+export { fetchAccountDetails, fetchBalance, recipientName };
